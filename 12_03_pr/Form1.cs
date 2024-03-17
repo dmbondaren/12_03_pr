@@ -19,6 +19,7 @@ namespace _12_03_pr
         List<int> collection1 = new List<int>(); // колекція 1
         List<int> collection2 = new List<int>(); // колекція 2
         List<Label> labelList = new List<Label>(); // список label
+        List<int[]> arrays = new List<int[]>(); // колекція масивів
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -87,32 +88,9 @@ namespace _12_03_pr
         }
 
 
-        private void button7_Click(object sender, EventArgs e)
-        {
-           
-        }
+       
 
-        private void button8_Click(object sender, EventArgs e)
-        {
-            // Знаходить і показує масив з цієї колекції з максимальною сумою елементів
-            List<int[]> arrays = new List<int[]>(); // колекція масивів
-            // Додавання масивів в колекцію
-            Random rnd = new Random();
-            for (int i = 0; i < 5; i++)
-            {
-                int[] randomArray = new int[3];
-                for (int j = 0; j < 3; j++)
-                {
-                    randomArray[j] = rnd.Next(-100, 100); // генеруємо випадкове число від -100 до 99
-                }
-                arrays.Add(randomArray);
-            }
-            // Пошук масиву з максимальною сумою елементів
-            int maxSum = arrays.Max(arr => arr.Sum());
-            int[] maxSumArray = arrays.First(arr => arr.Sum() == maxSum);
-            // Вивід масиву з максимальною сумою елементів
-            MessageBox.Show("Масив з максимальною сумою елементів: " + string.Join(", ", maxSumArray));
-        }
+       
         private void button9_Click(object sender, EventArgs e)
         {
             listBox2.Items.Clear();
@@ -129,10 +107,7 @@ namespace _12_03_pr
 
 
 
-        private void button10_Click(object sender, EventArgs e)
-        {
-
-        }
+     
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -164,5 +139,55 @@ namespace _12_03_pr
                 MessageBox.Show("Введіть коректний номер елементу.");
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            // Перевіряємо, чи вже існують два масиви
+            if (arrays.Count >= 2)
+            {
+                // Якщо так, то видаляємо їх
+                arrays.Clear();
+                listBox1.Items.Clear();
+                listBox2.Items.Clear();
+            }
+
+            // Створюємо масив з 3 випадкових цілих чисел
+            Random random = new Random();
+            int[] array = new int[3];
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = random.Next(1, 100); // Змініть діапазон, якщо потрібно
+            }
+
+            // Додаємо масив до колекції
+            arrays.Add(array);
+
+            // Відображаємо масив у відповідному listBox
+            if (arrays.Count == 1)
+            {
+                listBox1.Items.AddRange(array.Select(x => x.ToString()).ToArray());
+            }
+            else if (arrays.Count == 2)
+            {
+                listBox2.Items.AddRange(array.Select(x => x.ToString()).ToArray());
+            }
+        }
+
+
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            // Знаходимо масиви з максимальною та мінімальною сумою елементів
+            int[] maxArray = arrays.OrderByDescending(array => array.Sum()).First();
+            int[] minArray = arrays.OrderBy(array => array.Sum()).First();
+            // Виводимо їх номери в колекції
+            int maxIndex = arrays.IndexOf(maxArray);
+            int minIndex = arrays.IndexOf(minArray);
+            MessageBox.Show($"Максимальна сума: {maxArray.Sum()} (масив №{maxIndex + 1}), Мінімальна сума: {minArray.Sum()} (масив №{minIndex + 1})");
+            // Міняємо їх місцями в колекції
+            arrays[maxIndex] = minArray;
+            arrays[minIndex] = maxArray;
+        }
+
     }
 }
